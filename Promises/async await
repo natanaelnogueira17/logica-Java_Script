@@ -1,0 +1,68 @@
+import axios from "axios";
+axios
+  .get("https://api.github.com/users/maykbrito")
+  .then((response) => axios.get(response.data.repos_url))
+  .then((repos) => console.log(repos.data))
+  .catch((error) => console.log(error));
+
+//////////////////////////////////////////////////////////
+Promise.all([
+  axios.get("https://api.github.com/users/maykbrito"),
+  axios.get("https://api.github.com/users/maykbrito/repos")
+])
+  .then((response) => {
+    console.log(response[0].data.login);
+    console.log(response[1].data.length);
+  })
+  .catch((error) => console.log(error));
+
+////////////////////////////////////////////////////
+
+const promessa = new Promise(function (resolve, reject) {
+  return resolve("ok 200");
+});
+
+async function start() {
+  try {
+    const result = await promessa;
+    console.log(result);
+    console.log(" a primeira");
+  } catch (e) {
+    console.log(e);
+  } finally {
+    console.log("rodar sempre");
+  }
+}
+
+start();
+
+
+async function start1() {
+  try {
+    const url = "https://api.github.com/users/maykbrito";
+    const user = await fetch(url).then((resposta) => resposta.json());
+    const userResposta = await fetch(user.repos_url).then((resp) => resp);
+    console.log(userResposta);
+    console.log("entrou aqui0 ");
+  } catch (e) {
+    console.log(e);
+  }
+}
+start1();
+
+///////////////////////////////////////////////////////
+
+//mesma coisa porem escrito com axios
+
+async function fetchrepos() {
+  try {
+    const user = await axios.get("https://api.github.com/users/maykbrito");
+    const repos = await axios.get(user.data.repos_url);
+    console.log(repos.data);
+    console.log("entrou aqui1 ");
+  } catch (e) {
+    console.log(e);
+  }
+}
+
+fetchrepos();
